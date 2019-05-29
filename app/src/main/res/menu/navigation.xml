@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+            android:id="@+id/numbers"
+            android:icon="@drawable/ic_exposure_plus_1_black_24dp"
+            android:title="@string/numero"/>
+
+    <item
+            android:id="@+id/words"
+            android:icon="@drawable/ic_text_format_black_24dp"
+            android:title="@string/palavras"/>
+
+    <item
+            android:id="@+id/groups"
+            android:icon="@drawable/ic_group_black_24dp"
+            android:title="@string/grupos"/>
+
+</menu>
