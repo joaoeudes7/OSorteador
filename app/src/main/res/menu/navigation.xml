@@ -4,16 +4,20 @@
     <item
             android:id="@+id/numbers"
             android:icon="@drawable/ic_exposure_plus_1_black_24dp"
-            android:title="@string/numero"/>
+            android:title="@string/numbers"/>
 
     <item
             android:id="@+id/words"
             android:icon="@drawable/ic_text_format_black_24dp"
-            android:title="@string/palavras"/>
+            android:title="@string/words"/>
 
     <item
             android:id="@+id/groups"
             android:icon="@drawable/ic_group_black_24dp"
-            android:title="@string/grupos"/>
+            android:title="@string/groups"/>
+    <item
+            android:id="@+id/coin"
+            android:icon="@drawable/ic_monetization_on_black_24dp"
+            android:title="@string/coin"/>
 
 </menu>

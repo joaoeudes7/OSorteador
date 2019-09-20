@@ -1,4 +1,11 @@
 package com.jedev.osorteador.viewmodel
 
-class RandomViewModel {
+import androidx.lifecycle.ViewModel
+
+class RandomViewModel: ViewModel()  {
+    val historicNumbers = mutableListOf<Int>()
+
+    fun clearHistoric() {
+        historicNumbers.clear()
+    }
 }

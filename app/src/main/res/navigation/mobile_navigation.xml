@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/mobile_navigation"
+            app:startDestination="@+id/numbers">
+
+    <fragment
+            android:id="@+id/numbers"
+            android:name="com.jedev.osorteador.ui.RandomFragment"
+            android:label="@string/numbers"
+            tools:layout="@layout/fragment_random"/>
+
+    <fragment
+            android:id="@+id/words"
+            android:name="com.jedev.osorteador.ui.WordsFragment"
+            android:label="@string/words"
+            tools:layout="@layout/fragment_words"/>
+
+    <fragment
+            android:id="@+id/groups"
+            android:name="com.jedev.osorteador.ui.GroupsFragment"
+            android:label="@string/groups"
+            tools:layout="@layout/fragment_groups"/>
+    <fragment
+            android:id="@+id/coin"
+            android:name="com.jedev.osorteador.ui.CoinFragment"
+            android:label="@string/coin"
+            tools:layout="@layout/fragment_coin" />
+</navigation>
