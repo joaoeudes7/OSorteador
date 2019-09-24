@@ -6,17 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.jedev.osorteador.R
 import com.jedev.osorteador.adapter.ItemWordAdapter
+import com.jedev.osorteador.adapter.ItemWordRaffledAdapter
 import com.jedev.osorteador.utils.ComponentsUtils.setupRecyclerView
 import com.jedev.osorteador.utils.FragmentHelper.snackBar
 import com.jedev.osorteador.utils.FragmentHelper.toast
 import com.jedev.osorteador.utils.RandomUtils
 import com.jedev.osorteador.utils.ViewUtils.customAlertDialog
-import com.jedev.osorteador.viewmodel.WordsViewModel
 import kotlinx.android.synthetic.main.dialog_add_word.view.*
 import kotlinx.android.synthetic.main.fragment_words.*
+import org.jetbrains.anko.support.v4.find
 
 class WordsFragment : Fragment() {
 
@@ -25,11 +26,13 @@ class WordsFragment : Fragment() {
         Words(1)
     }
 
-    private val viewModel by lazy {
-        ViewModelProvider(this).get(WordsViewModel::class.java)
-    }
+    private val words = mutableListOf<String>()
+    private val historicWords = mutableListOf<String>()
 
     private var actualMode = MODE.Words
+
+
+    private val recyclerView by lazy { find<RecyclerView>(R.id.recyclerView) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_words, container, false)
@@ -53,6 +56,10 @@ class WordsFragment : Fragment() {
             onRandomWord()
         }
 
+        btn_clear_history.setOnClickListener {
+            onClearHistory()
+        }
+
         btn_change_list_word.setOnClickListener {
             actualMode = if (actualMode == MODE.Words) MODE.Historic else MODE.Words
 
@@ -60,29 +67,37 @@ class WordsFragment : Fragment() {
         }
     }
 
+    private fun onClearHistory() {
+        historicWords.clear()
+        recyclerView.adapter!!.notifyDataSetChanged()
+    }
+
     private fun changeListMode(modeList: MODE) {
         actualMode = modeList
 
-        val data = when (modeList) {
-            MODE.Historic -> viewModel.historicWords.value
-            MODE.Words -> viewModel.words.value
-        }
+        when (modeList) {
+            MODE.Historic -> {
+                btn_clear_history.visibility = View.VISIBLE
+                recyclerView.adapter = ItemWordRaffledAdapter(historicWords)
+            }
+            MODE.Words -> {
+                btn_clear_history.visibility = View.GONE
 
-        (recyclerView.adapter as ItemWordAdapter).setItems(data!!)
+                recyclerView.adapter = ItemWordAdapter(words, ::onDeleteWorld)
+            }
+        }
     }
 
     private fun onRandomWord() {
-        viewModel.words.value?.let {
-            if (it.isNotEmpty()) {
-                val word = RandomUtils.randomWords(it)
+        if (words.size > 1)  {
+            val word = RandomUtils.randomWords(words)
 
-                viewModel.addInHistoric(word)
-                changeListMode(MODE.Historic)
+            addInHistoric(word)
+            changeListMode(MODE.Historic)
 
-                snackBar(word)
-            } else {
-                toast("Lista de palavras vazia")
-            }
+            snackBar(word)
+        } else {
+            toast("Adicione palavras na lista!")
         }
     }
 
@@ -97,7 +112,7 @@ class WordsFragment : Fragment() {
             val word = mDialogView.edt_word.text.toString().trim()
 
             if (word.isNotEmpty()) {
-                viewModel.addWord(word)
+                addWord(word)
                 changeListMode(MODE.Words)
 
                 mAlertDialog.dismiss()
@@ -110,6 +125,19 @@ class WordsFragment : Fragment() {
     }
 
     private fun onDeleteWorld(word: String) {
-        viewModel.removeWord(word)
+        removeWord(word)
+    }
+
+
+    private fun addWord(item: String) {
+        this.words.add(item)
+    }
+
+    private fun removeWord(item: String) {
+        this.words.remove(item)
+    }
+
+    private fun addInHistoric(item: String) {
+        this.historicWords.add(item)
     }
 }
